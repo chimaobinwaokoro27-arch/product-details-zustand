@@ -1,26 +1,23 @@
 import { useEffect } from 'react'
 import { formatPrice } from '../lib/formatPrice.js'
 import { useCartDrawerStore } from '../store/useCartDrawerStore.js'
-import {
-  selectIsEmpty,
-  selectItemCount,
-  selectSubtotal,
-  useCartStore,
-} from '../store/useCartStore.js'
+import { useCart } from '../context/CartContext.jsx'
 import CartIcon from './CartIcon.jsx'
 
 export default function CartDrawer() {
   const open = useCartDrawerStore((state) => state.isOpen)
   const openDrawer = useCartDrawerStore((state) => state.openDrawer)
   const closeDrawer = useCartDrawerStore((state) => state.closeDrawer)
-  const items = useCartStore((state) => state.items)
-  const itemCount = useCartStore(selectItemCount)
-  const subtotal = useCartStore(selectSubtotal)
-  const isEmpty = useCartStore(selectIsEmpty)
-  const increment = useCartStore((state) => state.increment)
-  const decrement = useCartStore((state) => state.decrement)
-  const removeItem = useCartStore((state) => state.removeItem)
-  const clearCart = useCartStore((state) => state.clearCart)
+  const {
+    items,
+    itemCount,
+    subtotal,
+    isEmpty,
+    incrementItem,
+    decrementItem,
+    removeItem,
+    clearCart,
+  } = useCart()
 
   useEffect(() => {
     if (!open) return undefined
@@ -106,7 +103,7 @@ export default function CartDrawer() {
                         <button
                           type="button"
                           tabIndex={open ? 0 : -1}
-                          onClick={() => decrement(item.id)}
+                          onClick={() => decrementItem(item.id)}
                           aria-label={`Decrease quantity of ${item.title}`}
                           className="h-7 w-7 text-sm text-stone-500 transition-colors hover:text-clay-600"
                         >
@@ -118,7 +115,7 @@ export default function CartDrawer() {
                         <button
                           type="button"
                           tabIndex={open ? 0 : -1}
-                          onClick={() => increment(item.id)}
+                          onClick={() => incrementItem(item.id)}
                           aria-label={`Increase quantity of ${item.title}`}
                           className="h-7 w-7 text-sm text-stone-500 transition-colors hover:text-clay-600"
                         >

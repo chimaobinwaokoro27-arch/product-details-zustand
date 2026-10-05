@@ -1,17 +1,26 @@
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { formatPrice } from '../lib/formatPrice.js'
-import { useCartStore } from '../store/useCartStore.js'
+import { useAuth } from '../context/AuthContext.jsx'
+import { useCart } from '../context/CartContext.jsx'
 import { useCartDrawerStore } from '../store/useCartDrawerStore.js'
 import CartIcon from './CartIcon.jsx'
 
 export default function ProductCard({ product }) {
-  const addItem = useCartStore((state) => state.addItem)
-  const lastAddedId = useCartStore((state) => state.lastAddedId)
+  const { isAuthenticated } = useAuth()
+  const { addItem, lastAddedId } = useCart()
   const openDrawer = useCartDrawerStore((state) => state.openDrawer)
+  const navigate = useNavigate()
   const justAdded = lastAddedId === product.id
 
   // Add, then reveal the cart so the item just added can be seen.
   const handleAdd = () => {
+    // Guard clause: the cart belongs to a signed-in user, so send anyone else
+    // to the login page instead of silently doing nothing.
+    if (!isAuthenticated) {
+      navigate('/login', { replace: true })
+      return
+    }
+
     addItem(product)
     openDrawer()
   }

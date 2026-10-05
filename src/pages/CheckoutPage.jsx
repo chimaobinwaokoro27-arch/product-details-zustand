@@ -1,13 +1,11 @@
 import { useAuth } from '../context/AuthContext'
-import { useCartStore, selectSubtotal } from '../store/useCartStore'
+import { useCart } from '../context/CartContext'
 import { formatPrice } from '../lib/formatPrice'
 import { Link } from 'react-router-dom'
 
 export default function CheckoutPage() {
   const { user } = useAuth()
-  const items = useCartStore((state) => state.items)
-  const subtotal = useCartStore(selectSubtotal)
-  const clearCart = useCartStore((state) => state.clearCart)
+  const { items, subtotal, clearCart } = useCart()
 
   const handlePlaceOrder = () => {
     alert(`Order placed for ${formatPrice(subtotal)}! Thank you for your purchase.`)
@@ -48,7 +46,7 @@ export default function CheckoutPage() {
         </div>
       ) : (
         <div className="mt-8 space-y-6">
-          <div className="rounded-2xl border border-bone-200 bg-white overflow-hidden">
+          <div className="overflow-hidden rounded-2xl border border-bone-200 bg-white">
             <div className="border-b border-bone-200 px-6 py-4">
               <h2 className="font-display text-xl text-stone-900">Order Summary</h2>
             </div>

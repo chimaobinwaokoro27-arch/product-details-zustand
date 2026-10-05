@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { useCartStore } from '../store/useCartStore.js'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext.jsx'
+import { useCart } from '../context/CartContext.jsx'
 import { useCartDrawerStore } from '../store/useCartDrawerStore.js'
 import { useProductDetailStore } from '../store/useProductDetailStore.js'
 import { formatPrice } from '../lib/formatPrice.js'
@@ -17,12 +18,20 @@ function SpecRow({ label, value }) {
 
 export default function ProductDetailPage() {
   const { id } = useParams()
-  const addItem = useCartStore((state) => state.addItem)
-  const lastAddedId = useCartStore((state) => state.lastAddedId)
+  const { isAuthenticated } = useAuth()
+  const { addItem, lastAddedId } = useCart()
   const openDrawer = useCartDrawerStore((state) => state.openDrawer)
+  const navigate = useNavigate()
 
   // Add, then reveal the cart so the item just added can be seen.
   const handleAdd = () => {
+    // Guard clause: the cart is stored per user, so an anonymous visitor has
+    // nowhere to save this item. Send them to login first.
+    if (!isAuthenticated) {
+      navigate('/login', { replace: true })
+      return
+    }
+
     addItem(product)
     openDrawer()
   }
