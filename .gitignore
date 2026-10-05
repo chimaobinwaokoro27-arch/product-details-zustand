@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Environment variables - never commit real Firebase keys.
+# Vite only exposes variables prefixed with VITE_ to the browser.
+.env
+.env.local
+.env.*.local
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

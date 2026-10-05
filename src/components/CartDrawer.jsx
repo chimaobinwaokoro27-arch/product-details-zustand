@@ -59,9 +59,12 @@ export default function CartDrawer() {
         aria-label="Shopping cart"
         aria-hidden={!open}
       >
+        {/* On phones this is a small floating card so the product list underneath
+            stays visible and tappable while the cart is open. From sm up it
+            becomes the full-height side drawer. */}
         <div
-          className={`absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-bone-50 shadow-2xl transition-transform duration-300 ease-out ${
-            open ? 'pointer-events-auto translate-x-0' : 'pointer-events-none translate-x-full'
+          className={`absolute right-3 bottom-3 flex max-h-[60vh] w-64 flex-col overflow-hidden rounded-2xl border border-bone-200 bg-bone-50 shadow-xl transition-all duration-300 ease-out sm:inset-y-0 sm:right-0 sm:bottom-auto sm:max-h-none sm:w-full sm:max-w-sm sm:rounded-none sm:border-0 sm:shadow-2xl ${
+            open ? 'pointer-events-auto translate-x-0 opacity-100' : 'pointer-events-none translate-x-full opacity-0'
           }`}
         >
           <div className="flex items-center justify-between border-b border-bone-200 px-6 py-5">
